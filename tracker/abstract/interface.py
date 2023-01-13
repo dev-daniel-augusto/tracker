@@ -7,7 +7,7 @@ from abc import ABC, abstractmethod
 class AbstractTrackerInterface(ABC):
 
     def __init__(self, cols: t.Sequence[str])-> None: self.df = pd.DataFrame(columns=cols)
-    def __str__(self): f'Tracker<[{self.df.shape[0]}:{self.errors}|{self.successes}]>'
+    def __str__(self): return f'Tracker<[{self.df.shape[0]}:{self.errors}|{self.successes}]>'
     @abstractmethod
     def transform(self, **kwargs) -> t.Dict[t.Any, t.Any]: ...
     @property
