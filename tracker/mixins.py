@@ -32,9 +32,9 @@ class CSVMixin(AbstractTrackerInterface):
         if flag == flags.ALL:
             self.df.to_csv(path, index=False, **kwargs)
         elif flag == flags.ONLY_ERRORS:
-            self.successes_df.to_csv(path, index=False, **kwargs)
-        elif flag == flags.ONLY_SUCCESSES:
             self.errors_df.to_csv(path, index=False, **kwargs)
+        elif flag == flags.ONLY_SUCCESSES:
+            self.successes_df.to_csv(path, index=False, **kwargs)
         else:
             raise InvalidFlagError(f'Flag {flag} is not accepted.')
 
