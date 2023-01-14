@@ -87,6 +87,10 @@ class BaseTracker(AbstractTrackerInterface):
         else:
             raise AppendOutOfScopeError
 
+    def transform(self, **kwargs) -> t.Dict[t.Any, t.Any]:
+        """Overridden."""
+        return kwargs
+
     def add_snapshot(self, **kwargs) -> None:
         """Record a given block execution output."""
         row = self.transform(**kwargs)
