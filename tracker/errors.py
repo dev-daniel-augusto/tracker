@@ -3,8 +3,8 @@ class BaseTrackerException(Exception):
 
 
 class AppendOutOfScopeError(BaseTrackerException):
-    """`append` must be called either by `success_dict` or `error_dict` methods."""
+    """Invalid caller source."""
 
 
 class InvalidFlagError(BaseTrackerException):
-    """`create_csv` passed flag not recognized."""
+    """Not recognized flag."""
