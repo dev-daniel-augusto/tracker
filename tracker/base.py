@@ -29,7 +29,7 @@ class BaseTracker(AbstractTrackerInterface):
 
     @property
     def status(self) -> t.Tuple[int, int]:
-        """Split the entries into the success and error groups."""
+        """Split the entries into the error and success groups."""
         return self.errors, self.successes
 
     @property
@@ -47,12 +47,16 @@ class BaseTracker(AbstractTrackerInterface):
     def summarize_errors(self) -> None:
         """Sum up all entries flagged as errors into an array by using dict data type."""
         self.errors_array = np.array([])
-        self.errors_df.apply(self.error_dict, axis=1)
+        errors_df = self.errors_df
+        if not errors_df.empty:
+            errors_df.apply(self.error_dict, axis=1)
 
     def summarize_successes(self) -> None:
         """Sum up all entries flagged as successes into an array by using dict data type."""
         self.successes_array = np.array([])
-        self.successes_df.apply(self.success_dict, axis=1)
+        successes_df = self.successes_df
+        if not successes_df.empty:
+            successes_df.apply(self.success_dict, axis=1)
 
     def summarize(
         self,

@@ -2,6 +2,7 @@ from setuptools import setup, find_packages
 
 
 class ProjectSetup:
+
     LICENSE = 'MIT'
     REQUIRES_PYTHON = '>=3.8'
 
