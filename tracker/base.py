@@ -30,7 +30,7 @@ class BaseTracker(AbstractTrackerInterface):
     @property
     def status(self) -> t.Tuple[int, int]:
         """Split the entries into the success and error groups."""
-        return self.successes, self.errors
+        return self.errors, self.successes
 
     @property
     def errors_df(self) -> pd.DataFrame:
@@ -44,12 +44,12 @@ class BaseTracker(AbstractTrackerInterface):
         filter_by = (self.df['success'].notnull()) & (self.df['success'] != False)
         return self.df.loc[filter_by]
 
-    def summarize_errors(self):
+    def summarize_errors(self) -> None:
         """Sum up all entries flagged as errors into an array by using dict data type."""
         self.errors_array = np.array([])
         self.errors_df.apply(self.error_dict, axis=1)
 
-    def summarize_successes(self):
+    def summarize_successes(self) -> None:
         """Sum up all entries flagged as successes into an array by using dict data type."""
         self.successes_array = np.array([])
         self.successes_df.apply(self.success_dict, axis=1)
@@ -64,7 +64,7 @@ class BaseTracker(AbstractTrackerInterface):
         summary = {}
         if summarize_status:
             status = self.status
-            summary.update({'successes': status[0], 'errors': status[1]})
+            summary.update({'errors': status[0], 'successes': status[1]})
         if summarize_errors:
             self.summarize_errors()
             summary['failed'] = self.errors_array.tolist()
@@ -73,20 +73,21 @@ class BaseTracker(AbstractTrackerInterface):
             summary['succeded'] = self.successes_array.tolist()
         return json.dumps(summary, indent=4)
 
-    def log_summary(self, logger: logging.Logger, **kwargs):
+    def log_summary(self, logger: logging.Logger, **kwargs) -> None:
         """Display tracker's summary through a log upon informational level."""
         logger.info(self.summarize(**kwargs))
 
-    def append_dict(self, __dict: t.Dict[str, t.Any]):
+    def append_dict(self, __dict: t.Dict[str, t.Any]) -> None:
         """Insert a self custom map to be displayed into summary depending on the caller source."""
         caller = inspect.stack()[1][3]
         if caller == 'error_dict':
             self.errors_array = np.append(__dict, self.errors_array)
         elif caller == 'success_dict':
             self.successes_array = np.append(__dict, self.successes_array)
-        raise AppendOutOfScopeError
+        else:
+            raise AppendOutOfScopeError
 
-    def add_snapshot(self, **kwargs):
+    def add_snapshot(self, **kwargs) -> None:
         """Record a given block execution output."""
         row = self.transform(**kwargs)
         self.df.loc[len(self.df)] = row
