@@ -4,11 +4,11 @@ import logging
 import numpy as np
 import pandas as pd
 import typing as t
-from tracker.errors import AppendOutOfScope
+from tracker.errors import AppendOutOfScopeError
 from tracker.abstract.interface import AbstractTrackerInterface
 
 
-class AbstractTracker(AbstractTrackerInterface):
+class BaseTracker(AbstractTrackerInterface):
     """Nominative class to watch module's execution to provide reports around it."""
 
     def __init__(self, cols: t.Sequence[str]):
@@ -84,7 +84,7 @@ class AbstractTracker(AbstractTrackerInterface):
             self.errors_array = np.append(__dict, self.errors_array)
         elif caller == 'success_dict':
             self.successes_array = np.append(__dict, self.successes_array)
-        raise AppendOutOfScope
+        raise AppendOutOfScopeError
 
     def add_snapshot(self, **kwargs):
         """Record a given block execution output."""
