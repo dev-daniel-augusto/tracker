@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 
 
 class AbstractTrackerInterface(ABC):
+    """Most embracing Tracker's nominations, providing a common methods to create subclasses."""
 
     def __init__(self, cols: t.Sequence[str]) -> None: self.df = pd.DataFrame(columns=cols)
     def __str__(self) -> str: return f'Tracker<[{self.df.shape[0]}:{self.errors}|{self.successes}]>'

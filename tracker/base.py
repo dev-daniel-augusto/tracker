@@ -64,7 +64,14 @@ class BaseTracker(AbstractTrackerInterface):
         summarize_errors: t.Optional[bool] = True,
         summarize_successes: t.Optional[bool] = False,
     ) -> str:
-        """Sum up the global tracker's status."""
+        """Sum up the global tracker's status and generate a JSON content from it.
+
+        Parameters
+        ------
+        summarize_status: indicates whether errors/successes count must be displayed in JSON.
+        summarize_errors: indicates whether errors array must be displayed in JSON.
+        summarize_successes: indicates whether successes array must be displayed in JSON.
+        """
         summary = {}
         if summarize_status:
             status = self.status
@@ -78,11 +85,27 @@ class BaseTracker(AbstractTrackerInterface):
         return json.dumps(summary, indent=4)
 
     def log_summary(self, logger: logging.Logger, **kwargs) -> None:
-        """Display tracker's summary through a log upon informational level."""
+        """Display tracker's summary through a log upon informational level.
+
+        Parameters
+        ------
+        logger: built-in Python util to display/record messages during module's flow.
+        """
         logger.info(self.summarize(**kwargs))
 
     def append_dict(self, __dict: t.Dict[str, t.Any]) -> None:
-        """Insert a self custom map to be displayed into summary depending on the caller source."""
+        """Insert a self custom map to be displayed into summary depending on the caller source.
+
+        Each dictionary object is inserted into an array depending on the caller source stack. This
+        is meant to be invoked either by `error_dict` or `success_dict` methods, otherwise throwing
+        an exception.
+
+        The populated arrays are used afterwards to generate reports using a JSON notation.
+
+        Parameters
+        ------
+        __dict: map holding error/success information to be appended into the correct arrays.
+        """
         caller = inspect.stack()[1][3]
         if caller == 'error_dict':
             self.errors_array = np.append(__dict, self.errors_array)
