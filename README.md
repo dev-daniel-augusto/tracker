@@ -29,9 +29,10 @@ class RequestTracker(tk.BaseTracker):
 
 tracker = RequestTracker()
 ```
+
 When calling the superclass `__init__` an empty DataFrame is created with the passed columns. The columns are typically what you want to map. The `transform` method provides a way to apply several processing layers on data before effectively saving a row on the DataFrame each time, but nothing prevents ignoring this method and making the data processing outside the class scope.
 
-## Use Case
+## Exemple
 
 Let's say you have received several requests to update your app customers' names, but rather than processing those requests immediately you've just saved those information (payloads) to process them later by an asynchronous approach.
 
@@ -112,7 +113,6 @@ After doing what must be done and populating your tracker, you may want to displ
     <td>False</td>
   </tr>
 </table>
-
 
 You might need only a piece of those information, like errors entries, successes entries or just a small insight around them:
 
