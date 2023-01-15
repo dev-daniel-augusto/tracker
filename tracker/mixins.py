@@ -9,7 +9,7 @@ from tracker.abstract.interface import AbstractTrackerInterface
 class CSVMixin(AbstractTrackerInterface):
     """Adds a functionality of creating .csv files from trackers' scopes."""
 
-    def create_csv(self, path: str, flag: int, **kwargs):
+    def create_csv(self, path: str, flag: int, **kwargs) -> None:
         """Generate a .csv file from errors df, successes df or entire df.
 
         Parameters
@@ -64,7 +64,12 @@ class TimeMixin(AbstractTrackerInterface):
     def add_time(
         transform: t.Callable[[t.Dict[str, t.Any]], t.Dict[str, t.Any]],
     ) -> t.Callable[..., t.Dict[str, t.Any]]:
-        """Wrap `AbstractTrackerInterface.transform` to include a timing feature."""
+        """Wrap `AbstractTrackerInterface.transform` to include a timing feature.
+
+        Parameters
+        ------
+        transform: `AbstractTrackerInterface.transform` callable.
+        """
         @wraps(transform)
         def time_decorator(self, *args, **kwargs) -> t.Dict[str, t.Any]:
             """Fill DataFrame's entries time column with the current time following the ISO 8601."""
